@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./partials/head.ejs') %>
+        <title>homepage</title>
+</head>
+
+<body>
+    <%- include('./partials/nav.ejs') %>
+
+        <div class="container py-5">
+
+            <% if (!locals.blog) { %>
+
+                <div class="text-center py-5">
+                    <h2>No blog to view.</h2>
+                </div>
+
+                <% } else { %>
+
+                    <article class="mx-auto" style="max-width: 760px;">
+
+                        <div class="text-center mb-4">
+                            <span class="badge bg-primary-subtle text-primary-emphasis px-3 py-2">
+                                BLOG ARTICLE
+                            </span>
+                            <h1 class="fw-bold mt-3">
+                                <%= blog.title %>
+                            </h1>
+                        </div>
+
+                        <img src="<%= blog.coverImage %>" alt="cover-image"
+                            class="img-fluid rounded-3 shadow-sm mb-4 w-100 object-fit-cover" style="max-height: 420px;">
+
+                        <div class="fs-5" style="white-space: pre-wrap;">
+                            <%= blog.body %>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-2 mt-4 pt-3 border-top">
+                            <img src="<%= blog.createdBy.profileImage %>" alt="user profile image"
+                                class="rounded-circle" width="45" height="45" style="object-fit: cover;">
+                            <span class="fw-semibold">
+                                <%= blog.createdBy.fullName %>
+                            </span>
+                        </div>
+
+                    </article>
+
+                    <hr class="my-5">
+
+                    <section class="mx-auto" style="max-width: 760px;">
+
+                        <h3 class="fw-bold mb-4">
+                            <i class="bi bi-chat-dots-fill text-success me-2"></i>
+                            Comments
+                        </h3>
+
+                        <% if (locals.user) { %>
+
+                            <form action="/blog/comment/<%= blog._id %>" method="POST" class="card p-3 shadow-sm mb-4">
+
+                                <div class="mb-3">
+                                    <textarea name="content" class="form-control" rows="3"
+                                        placeholder="Share your thoughts..."></textarea>
+                                </div>
+
+                                <button class="btn btn-success align-self-end" type="submit">
+                                    <i class="bi bi-send-fill me-2"></i>
+                                    Post Comment
+                                </button>
+
+                            </form>
+
+                            <% } %>
+
+                                <% if(comments.length===0){ %>
+
+                                    <div class="text-center p-4 bg-light rounded-3 border text-muted">
+                                        <i class="bi bi-chat-square-dots fs-3 d-block mb-2"></i>
+                                        <h5>No comments yet</h5>
+                                        <p class="mb-0">
+                                            Start the discussion by sharing your thoughts.
+                                        </p>
+                                    </div>
+
+                                    <% } %>
+
+                                        <% comments.forEach(comment=> { %>
+
+                                            <div class="d-flex gap-3 py-3 border-bottom">
+
+                                                <img src="<%= comment.createdBy.profileImage %>"
+                                                    class="rounded-circle" width="42" height="42"
+                                                    style="object-fit: cover;" alt="">
+
+                                                <div>
+                                                    <h6 class="mb-1 fw-bold">
+                                                        <%= comment.createdBy.fullName %>
+                                                    </h6>
+                                                    <p class="mb-0">
+                                                        <%= comment.content %>
+                                                    </p>
+                                                </div>
+
+                                            </div>
+
+                                            <% }) %>
+
+                    </section>
+
+                    <% } %>
+
+        </div>
+
+        <%- include('./partials/scripts.ejs') %>
+
+</body>
+
+</html>
